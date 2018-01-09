@@ -36,9 +36,6 @@ RUN \
   sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf && \
   sed -i 's/^\(log_error\s.*\)/# \1/' /etc/mysql/my.cnf
 
-# Define mountable directories.
-VOLUME ["/etc/mysql", "/var/lib/mysql"]
-
 RUN \
   mkdir -p /var/run/mysqld && \
   chown -R mysql:mysql /var/run/mysqld && \
@@ -51,16 +48,18 @@ RUN \
 #  echo "mysql -e 'GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\" WITH GRANT OPTION;'" >> /tmp/config && \
 #  chmod +x /tmp/config
 
-RUN mysqld_safe & 
-RUN sleep 10s
+#RUN mysqld_safe & 
+#RUN sleep 10s
 #RUN mysqladmin --silent --wait=30 ping
-RUN mysql -e 'GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\" WITH GRANT OPTION;'
+#RUN mysql -e 'GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\" WITH GRANT OPTION;'
   
 # Execute MySQL Configuration
 #RUN \
 #  bash -c /tmp/config && \
 #  rm -f /tmp/config
 
+# Define mountable directories.
+VOLUME ["/etc/mysql", "/var/lib/mysql"]
 
 # Define working directory.
 WORKDIR /data

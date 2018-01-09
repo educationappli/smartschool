@@ -95,10 +95,9 @@ Vagrant.configure(2) do |config|
   #   sudo apt-get install -y apache2
   # SHELL
 
-  config.vm.provision :shell, :path => ".provision/bootstrap.sh"
   config.vm.provision "docker" do |d|
-    #d.build_image "/vagrant/dockers/app",
-    #   args: "-t 'webapp'"
+    d.build_image "/vagrant/dockers/app",
+       args: "-t 'webapp'"
     d.run "webapp",
        daemonize: true,
        restart: "always",
@@ -110,4 +109,5 @@ Vagrant.configure(2) do |config|
        restart: "always",
        args: "-p 3306:3306" 
   end
+  config.vm.provision :shell, :path => ".provision/bootstrap.sh"
 end
