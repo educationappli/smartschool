@@ -1,4 +1,4 @@
-# Project Title
+# SmartSchool 
 
 Online education management system
 
@@ -28,6 +28,19 @@ Execute following command to bring the machine up
 
 ```
 $ vagrant up
+```
+
+Fetch the latest source
+
+```
+$ cd ${WORKDIR}
+$ git fetch --all
+```
+
+Execute following command to bring the machine up with re provisioning
+
+```
+$ vagrant up --provision
 ```
 
 After vagrant machine got up, access following url to confirm whether project is running

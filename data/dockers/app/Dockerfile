@@ -56,14 +56,30 @@ ENV APACHE_PID_FILE /var/run/apache2.pid
 # Expose apache.
 EXPOSE 80
 
-# Copy this repo into place.
-ADD src /var/www/site
+# Clone the source repo into place.
+
+RUN apt-get -y install git php-mbstring php-xml \
+    && mkdir -p /var/www/site \
+    && cd /var/www/site \
+    && git clone -b develop https://github.com/mrahman/smartschool.git \
+    && mkdir -p /tmp/composer \
+    && cd /tmp/composer \
+    && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
+    && php composer-setup.php \
+    && php -r "unlink('composer-setup.php');" \
+    && cd /var/www/site/smartschool \
+    && php /tmp/composer/composer.phar install \
+    && rm -rf /tmp/composer
+
+COPY .env /var/www/site/smartschool/.env
 
 # Update the default apache site with the config we created.
 ADD apache-config.conf /etc/apache2/sites-enabled/000-default.conf
 ADD smartschool.conf /etc/apache2/sites-available/smartschool.conf
-RUN chown -R www-data:www-data /var/www/site/smartschool/storage
-RUN a2ensite smartschool
+RUN chown -R www-data:www-data /var/www/site/smartschool/storage \
+    && chown -R www-data:www-data /var/www/site/smartschool/bootstrap/cache \
+    && a2ensite smartschool
 
 # By default start up apache in the foreground, override with /bin/bash for interative.
 CMD /usr/sbin/apache2ctl -D FOREGROUND
