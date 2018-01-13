@@ -28,6 +28,18 @@ fi
 docker exec -it webapp bash -c 'cd /var/www/site/smartschool ; php artisan migrate:refresh --seed'
 docker exec -it database mysql -e "GRANT ALL PRIVILEGES ON smartschool.* TO smartschool@'%' IDENTIFIED BY 'sm@rtsch00l' WITH GRANT OPTION"
 
-docker network create smartschool_net
-docker network connect smartschool_net webapp
-docker network connect smartschool_net database
+
+if [ ! "$(docker network ls | grep smartschool_net)" ]
+then
+  docker network create smartschool_net
+fi 
+
+if [ ! "$(docker network inspect smartschool_net | grep webapp)" ]
+then
+  docker network connect smartschool_net webapp
+fi
+
+if [ ! "$(docker network inspect smartschool_net | grep database)" ]
+then
+  docker network connect smartschool_net database
+fi
