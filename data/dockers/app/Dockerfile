@@ -62,7 +62,7 @@ RUN apt-get -y install git php-mbstring php-xml \
     && mkdir -p /var/www/site \
     && echo "Options -Indexes" > /var/www/site/.htaccess \
     && cd /var/www/site \
-    && git clone -b develop https://github.com/educationappli/webapp.git \
+    && git clone -b develop https://github.com/educationappli/webapp.git smartschool \
     && mkdir -p /tmp/composer \
     && cd /tmp/composer \
     && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
