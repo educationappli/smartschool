@@ -32,9 +32,9 @@ RUN \
   apt-get update && \
   apt-get -y upgrade && \
   apt-get install -y mysql-server && \
-  rm -rf /var/lib/apt/lists/* && \
-  sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf && \
-  sed -i 's/^\(log_error\s.*\)/# \1/' /etc/mysql/my.cnf
+  rm -rf /var/lib/apt/lists/* 
+
+COPY mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf 
 
 RUN \
   mkdir -p /var/run/mysqld && \

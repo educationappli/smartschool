@@ -10,7 +10,7 @@ sudo chmod 644 /etc/nginx/sites-available/site.conf
 
 if [ -L /etc/nginx/sites-enabled/site.conf ]
 then
-  rm -f /etc/nginx/sites-enabled/site.conf
+  sudo rm -f /etc/nginx/sites-enabled/site.conf
 fi
 sudo ln -s /etc/nginx/sites-available/site.conf /etc/nginx/sites-enabled/site.conf
 sudo service nginx restart
@@ -39,5 +39,6 @@ then
   docker network connect smartschool_net database
 fi
 
-docker exec -it database mysql -e "GRANT ALL PRIVILEGES ON smartschool.* TO smartschool@'%' IDENTIFIED BY 'sm@rtsch00l' WITH GRANT OPTION"
-docker exec -it webapp bash -c 'cd /var/www/site/smartschool ; php artisan migrate:refresh --seed'
+docker exec -i database mysql -e "CREATE DATABASE IF NOT EXISTS smartschool DEFAULT CHARSET UTF8";
+docker exec -i database mysql -e "GRANT ALL PRIVILEGES ON smartschool.* TO smartschool@'%' IDENTIFIED BY 'sm@rtsch00l' WITH GRANT OPTION"
+docker exec -i webapp bash -c 'cd /var/www/site/smartschool ; php artisan migrate:refresh --seed'
